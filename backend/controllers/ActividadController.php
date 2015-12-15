@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use app\models\Actividad;
 use app\models\search\ActividadSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -17,6 +18,16 @@ class ActividadController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'delete', 'update', 'create-con-proyecto', 'update-con-proyecto'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -61,12 +72,14 @@ class ActividadController extends Controller
     public function actionCreate()
     {
         $model = new Actividad();
+        $bandera = true;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         } else {
             return $this->render('create', [
-                'model' => $model,
+                'model'     => $model,
+                'bandera'   => $bandera,
             ]);
         }
     }
@@ -80,12 +93,47 @@ class ActividadController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $bandera = true;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                'model'     => $model,
+                'bandera'   => $bandera,
+            ]);
+        }
+    }
+
+    public function actionCreateConProyecto($idProyecto)
+    {
+        $model = new Actividad();
+        $model->id_proyecto = $idProyecto;
+        $bandera = false;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['/proyectos/update', 'id'=>$model->id_proyecto]);
+        } else {
+            return $this->render('create', [
+                'model'     => $model,
+                'bandera'   => $bandera,
+            ]);
+        }
+    }
+
+    public function actionUpdateConProyecto($id)
+    {
+        $bandera = false;
+
+        $model = $this->findModel($id);
+
+        if($model->load(Yii::$app->request->post()) && $model->save())
+        {
+            return $this->redirect(['/proyectos/update', 'id'=>$model->id_proyecto]);
+        }else {
+            return $this->render('update', [
+                'model'     => $model,
+                'bandera'   => $bandera,
             ]);
         }
     }

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use app\models\Bitacoratiempo;
 use app\models\search\BitacoratiempoSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -17,6 +18,16 @@ class BitacoratiempoController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'delete', 'update'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
