@@ -5,23 +5,23 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "proyectos".
+ * This is the model class for table "actividades".
  *
  * @property integer $id
  * @property string $nombre
  * @property integer $activo
+ * @property integer $id_proyecto
  *
- * @property Actividades[] $actividades
- * @property BitacoraTiempos[] $bitacoraTiempos
+ * @property Proyectos $idProyecto
  */
-class Proyecto extends \yii\db\ActiveRecord
+class Actividad extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'proyectos';
+        return 'actividades';
     }
 
     /**
@@ -30,9 +30,9 @@ class Proyecto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['activo'], 'integer'],
+            [['id_proyecto'], 'integer'],
+            [['activo'], 'boolean'],
             [['nombre'], 'string', 'max' => 200],
-            [['nombre'], 'unique'],
             [['nombre'], 'required']
         ];
     }
@@ -46,23 +46,16 @@ class Proyecto extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nombre' => 'Nombre',
             'activo' => 'Activo',
+            'id_proyecto' => 'Id Proyecto',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getActividades()
+    public function getIdProyecto()
     {
-        return $this->hasMany(Actividad::className(), ['id_proyecto' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBitacoraTiempos()
-    {
-        return $this->hasMany(Bitacoratiempo::className(), ['id_proyecto' => 'id']);
+        return $this->hasOne(Proyecto::className(), ['id' => 'id_proyecto']);
     }
 
     public function beforeSave($insert)
