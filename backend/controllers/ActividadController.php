@@ -22,7 +22,7 @@ class ActividadController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'delete', 'update', 'create-con-proyecto', 'update-con-proyecto'],
+                        'actions' => ['index', 'view', 'create', 'delete', 'update', 'create-con-proyecto', 'update-con-proyecto', 'delete-con-proyecto'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]
@@ -112,7 +112,7 @@ class ActividadController extends Controller
         $bandera = false;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['/proyectos/update', 'id'=>$model->id_proyecto]);
+            return $this->redirect(['/proyecto/update', 'id'=>$model->id_proyecto]);
         } else {
             return $this->render('create', [
                 'model'     => $model,
@@ -129,7 +129,7 @@ class ActividadController extends Controller
 
         if($model->load(Yii::$app->request->post()) && $model->save())
         {
-            return $this->redirect(['/proyectos/update', 'id'=>$model->id_proyecto]);
+            return $this->redirect(['/proyecto/update', 'id'=>$model->id_proyecto]);
         }else {
             return $this->render('update', [
                 'model'     => $model,
@@ -149,6 +149,15 @@ class ActividadController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionDeleteConProyecto($id)
+    {
+        $model = $this->findModel($id);
+        $idP = $model->id_proyecto;
+        $model->delete();
+
+        return $this->redirect(['/proyecto/update', 'id'=>$idP]);
     }
 
     /**

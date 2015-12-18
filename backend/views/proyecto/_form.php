@@ -31,6 +31,26 @@ use yii\widgets\ActiveForm;
                         'class' => 'yii\grid\ActionColumn',
                         'controller' => 'actividad',
                         'header' => Html::a('<i class="glyphicon glyphicon-plus"></i>&nbsp;Agregar nueva', ['actividad/create-con-proyecto', 'idProyecto'=>$model->id]),
+                        'template' => '{update_con_proyecto}{delete}',
+                        'buttons' => [
+                            'update_con_proyecto' => function ($url, $model){
+                                return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url);
+                            },
+                            'delete' => function ($url, $model){
+                                return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url);
+                            }
+                        ],
+                        'urlCreator' => function($action, $model, $key, $index){
+                            if($action === 'update_con_proyecto')
+                            {
+                                $url = \yii\helpers\Url::to(['actividad/update-con-proyecto', 'id'=>$model->id]);
+                                return $url;
+                            }elseif($action === 'delete')
+                            {
+                                $url = \yii\helpers\Url::to(['actividad/delete-con-proyecto', 'id'=>$model->id]);
+                                return $url;
+                            }
+                        }
                     ],
                 ],
             ]);
