@@ -22,9 +22,13 @@ use yii\widgets\ActiveForm;
     ?>
 
     <?php
-    $proyectos = ArrayHelper::map(Proyecto::find()->where(['activo'=>1])->orderBy('nombre')->all(), 'id', 'nombre');
+    if($bandera){
+        $proyectos = ArrayHelper::map(Proyecto::find()->where(['activo'=>1])->orderBy('nombre')->all(), 'id', 'nombre');
     ?>
-    <?= $form->field($model, 'id_proyecto')->dropDownList($proyectos) ?>
+        <?= $form->field($model, 'id_proyecto')->dropDownList($proyectos) ?>
+    <?php
+    }
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

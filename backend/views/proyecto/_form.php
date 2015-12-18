@@ -15,8 +15,29 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
     <?php
-        if(!$model->isNewRecord)
+        if(!$model->isNewRecord) {
             echo $form->field($model, 'activo')->checkbox();
+    ?>
+        <h2>Actividades</h2>
+        <?=
+            \yii\grid\GridView::widget([
+                'dataProvider' => new \yii\data\ActiveDataProvider([
+                    'query' => $model->getActividades(),
+                    'pagination' => false
+                ]),
+                'columns' => [
+                    'nombre',
+                    [
+                        'class' => 'yii\grid\ActionColumn',
+                        'controller' => 'actividad',
+                        'header' => Html::a('<i class="glyphicon glyphicon-plus"></i>&nbsp;Agregar nueva', ['actividad/create-con-proyecto', 'idProyecto'=>$model->id]),
+                    ],
+                ],
+            ]);
+        ?>
+
+    <?php
+        }
     ?>
 
     <div class="form-group">
