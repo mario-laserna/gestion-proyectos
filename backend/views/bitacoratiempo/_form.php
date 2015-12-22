@@ -14,20 +14,40 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'fecha')->textInput() ?>
+    <?=
+        $form->field($model, 'fecha')->widget(\yii\jui\DatePicker::className(), [
+            'dateFormat' => 'dd-MM-yyyy',
+            'value' => date('d/m/Y'),
+            'options' => ['style' => 'position: relative; z-index: 999', 'class'=>'form-control'],
+        ])
+    ?>
 
-    <?= $form->field($model, 'hora_inicio')->textInput() ?>
+    <?=
+        $form->field($model, 'hora_inicio')->widget(\kartik\time\TimePicker::className(), [
+            'pluginOptions' => ['minuteStep'=>1]
+        ])
+    ?>
 
-    <?= $form->field($model, 'hora_final')->textInput() ?>
+    <?= $form->field($model, 'hora_final')->widget(\kartik\time\TimePicker::className(), [
+            'pluginOptions' => ['minuteStep'=>1]
+        ])
+    ?>
 
     <?= $form->field($model, 'interrupcion')->textInput() ?>
 
     <?= $form->field($model, 'actividad_noplaneada')->textInput(['maxlength' => true]) ?>
 
     <?php
-    $proyectos = ArrayHelper::map(Proyecto::find()->where(['activo'=>1])->orderBy('nombre')->all(), 'id', 'nombre');
+        $proyectos = ArrayHelper::map(Proyecto::find()->where(['activo'=>1])->orderBy('nombre')->all(), 'id', 'nombre');
+        echo $form->field($model, 'id_proyecto')->widget(\kartik\select2\Select2::className(), [
+            'data' => $proyectos,
+            'language' => 'es',
+            'options' => ['placeholder'=>'Seleccione un proyecto...'],
+            'pluginOptions' => [
+                'allowClear'=>true
+            ]
+        ]);
     ?>
-    <?= $form->field($model, 'id_proyecto')->dropDownList($proyectos) ?>
 
     <?= $form->field($model, 'artefacto')->textInput(['maxlength' => true]) ?>
 
