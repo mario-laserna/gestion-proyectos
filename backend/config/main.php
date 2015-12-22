@@ -33,6 +33,15 @@ return [
             'enablePrettyUrl'   => false,
             'showScriptName'    => true,
         ],
+        /*'view' => [
+            'theme' => [
+                'basePath' => '@app/themes/azulguinda',
+                'baseUrl' => '@web/themes/azulguinda',
+                'pathMap' => [
+                    '@app/views' => '@app/themes/azulguinda',
+                ],
+            ],
+        ],*/
     ],
     'params' => $params,
 ];
